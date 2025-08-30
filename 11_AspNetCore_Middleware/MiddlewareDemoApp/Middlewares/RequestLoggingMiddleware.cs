@@ -1,25 +1,27 @@
-//Custom Middleware
-
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 
-namespace MiddlewareDemoApp.Middleware
+namespace MiddlewareDemoApp.Middlewares
 {
+    // Middleware class
     public class RequestLoggingMiddleware
     {
         private readonly RequestDelegate _next;
+
         public RequestLoggingMiddleware(RequestDelegate next)
         {
             _next = next;
         }
-        public async Task Invoke(HttpContext context)
+
+        public async Task InvokeAsync(HttpContext context)
         {
-            Console.WriteLine($"[Log] Request for: {context.Request.Path}");
-            await _next(context); //calls next middleware
+            Console.WriteLine($"[LOG] Request for: {context.Request.Path}");
+            await _next(context);
         }
     }
 
-    //Extension method to use in Program.cs
+    // Top-level static class for extension method
     public static class RequestLoggingMiddlewareExtensions
     {
         public static IApplicationBuilder UseRequestLogging(this IApplicationBuilder builder)
